@@ -36,8 +36,11 @@
             <tbody id="paymentsTableBody">
             </tbody>
         </table>
+
         <button class="btn btn-primary" onclick="calculate()">Calcular</button>
+
         <h2>Resultados:</h2>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -45,11 +48,16 @@
                     <th>Cuota mensual</th>
                     <th>Abono al capital</th>
                     <th>Interés generado</th>
-                    <th>Saldo restante</th>
+                    <th>Saldo restante + Intereses</th>
+
                 </tr>
+
             </thead>
+
             <tbody id="resultsTableBody">
+
             </tbody>
+
         </table>
 
     </div>
@@ -58,6 +66,7 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
+
     function formatNumber(num) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
     }
@@ -82,7 +91,7 @@
             var principalPayment = monthlyPayment - interestGenerated;
             remainingBalance -= principalPayment;
             var row = document.createElement("tr");
-            row.innerHTML = "<td>" + i + "</td><td>$" + formatNumber(monthlyPayment) + "</td><td>$" + formatNumber(principalPayment.toFixed(2)) + "</td><td>$" + formatNumber(interestGenerated.toFixed(2)) + "</td><td>$" + formatNumber(remainingBalance.toFixed(2)) + "</td>";
+            row.innerHTML = "<td>" + i + "</td><td>$" + formatNumber(monthlyPayment) + "</td><td>$" + formatNumber(principalPayment.toFixed(2)) + "</td><td>$" + formatNumber(interestGenerated.toFixed(2)) + "</td><td>$" + formatNumber((remainingBalance+interestGenerated).toFixed(2)) + "</td>";
             resultsTableBody.appendChild(row);
         }
     }
