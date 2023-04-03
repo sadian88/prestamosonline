@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de préstamos</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        input[type=number] {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de préstamos</h1>
+        <div class="form-group">
+            <label for="clientName">Nombre del cliente:</label>
+            <input type="text" class="form-control" id="clientName" />
+        </div>
+        <div class="form-group">
+            <label for="loanAmount">Monto del préstamo:</label>
+            <input type="number" class="form-control" id="loanAmount" />
+        </div>
+        <div class="form-group">
+            <label for="interestRate">Tasa de interés mensual:</label>
+            <input type="number" class="form-control" id="interestRate" />
+        </div>
+        <button class="btn btn-primary" onclick="addPaymentRow()">Agregar cuota</button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Cuota mensual</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsTableBody">
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onclick="calculate()">Calcular</button>
+        <h2>Resultados:</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Cuota mensual</th>
+                    <th>Abono al capital</th>
+                    <th>Interés generado</th>
+                    <th>Saldo restante</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTableBody">
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    function formatNumber(num) {
+      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+    }
+
+    var paymentRowCount = 0;
+    function addPaymentRow() {
+        paymentRowCount++;
+        var paymentsTableBody = document.getElementById("paymentsTableBody");
+        var row = document.createElement("tr");
+        row.innerHTML = "<td>" + paymentRowCount + "</td><td><input type='number' class='form-control' id='paymentAmount" + paymentRowCount + "' /></td>";
+        paymentsTableBody.appendChild(row);
+    }
+    function calculate() {
+        var loanAmount = document.getElementById("loanAmount").value;
+        var interestRate = document.getElementById("interestRate").value / 100;
+        var remainingBalance = loanAmount;
+        var resultsTableBody = document.getElementById("resultsTableBody");
+        resultsTableBody.innerHTML = "";
+        for (var i = 1; i <= paymentRowCount; i++) {
+            var monthlyPayment = document.getElementById("paymentAmount" + i).value;
+            var interestGenerated = remainingBalance * interestRate;
+            var principalPayment = monthlyPayment - interestGenerated;
+            remainingBalance -= principalPayment;
+            var row = document.createElement("tr");
+            row.innerHTML = "<td>" + i + "</td><td>$" + formatNumber(monthlyPayment) + "</td><td>$" + formatNumber(principalPayment.toFixed(2)) + "</td><td>$" + formatNumber(interestGenerated.toFixed(2)) + "</td><td>$" + formatNumber(remainingBalance.toFixed(2)) + "</td>";
+            resultsTableBody.appendChild(row);
+        }
+    }
+</script>
+
+</body>
+
+</html>
